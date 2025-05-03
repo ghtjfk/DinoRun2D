@@ -15,4 +15,10 @@ public class ObstacleController : MonoBehaviour
     {
         rb.velocity = new Vector2(moveSpeedX, rb.velocity.y);
     }
+
+    // 메인 카메라에 안 보이면 없애겠다!
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
+    }
 }
