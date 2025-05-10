@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class DinoController : MonoBehaviour
@@ -18,6 +19,7 @@ public class DinoController : MonoBehaviour
     private Vector2 savedSize;      // 서 있을 때 값
     private BoxCollider2D boxCollider;
 
+
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
@@ -32,7 +34,7 @@ public class DinoController : MonoBehaviour
     void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, 0.2f, whatIsGround);
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded.Equals(true) && isDown.Equals(false))
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded.Equals(true))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
@@ -97,6 +99,16 @@ public class DinoController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("충돌함");
+        // 점수 획득이랑 충돌했을 때
+        if (collision.CompareTag("PointSpace"))
+        {
+            GameManager.instance.GetScore();    // 싱글톤으로 접근.
+        }
+
+        // 장애물이랑 충돌했을 때
+        if (collision.CompareTag("GameOverSpace"))
+        {
+            GameManager.instance.GameOver();
+        }
     }
 }

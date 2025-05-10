@@ -16,7 +16,7 @@ public class ObstacleController : MonoBehaviour
         rb.velocity = new Vector2(moveSpeedX, rb.velocity.y);
     }
 
-    // 메인 카메라에 안 보이면 없애겠다!
+    // 게임 ㅇ오브젝트가 카메라에 뷰 밖으로 나갔을 때 실행되는 함수.     visible함수 또한 있다!
     private void OnBecameInvisible()
     {
         Destroy(gameObject);
