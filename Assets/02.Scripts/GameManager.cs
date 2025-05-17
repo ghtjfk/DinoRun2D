@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     public int bestScore = 0;
     public TextMeshProUGUI nowScoreText;
 
+    public AudioSource playBGM;
+    public AudioSource gameOverBGM;
+
     private void Awake()
     {
         // 싱글톤 패턴임. 외우도록.
@@ -44,11 +47,13 @@ public class GameManager : MonoBehaviour
     {
         spawnInterval = Random.Range(0.5f,1.5f);
     }
+
     void Update()
     {
         if (isSpawning)
         {
             timer += Time.deltaTime;
+
             // 위치가 안 맞는 오류가 있었다. spawnPoints (부모 오브젝트)의 위치가 -0.4였음.. 그래서 전부 조금씩 내려갔던 거였다.
             if (timer >= spawnInterval)
             {
@@ -85,6 +90,11 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f; // 시간 정지
 
+        /*audio_BGM.clip = gameOverBGM;
+        audio_BGM.Play();*/
+        playBGM.Stop();
+        gameOverBGM.Play();
+
         // 현재 점수가 저장되어 있던 최고 점수보다 크면 저장
         if (score >= PlayerPrefs.GetInt("BestScore", 0))
         {
@@ -103,7 +113,7 @@ public class GameManager : MonoBehaviour
         /*
         restart를 현재 씬을 재로드 하는 방법으로 구현했어서,
         이런 식으로 베스트 스코어 업데이트를 구현하면 제대로 저장이 안됨.
-        이럴 때 or 적은 용량의 데이터를 저장할 때 or 보안이 중요한 데이터가 아닐 때
+        이럴 때! or 적은 용량의 데이터를 저장할 때 or 보안이 중요한 데이터가 아닐 때
         PlayerPrefs를 사용한다!!!!
 
         if(score >= bestScore)
@@ -117,8 +127,7 @@ public class GameManager : MonoBehaviour
     // Restart 버튼 눌렀을 때 실행되는 함수
     public void Restart()
     {
-        Time.timeScale = 1f; // 시간 다시 정상 흐름
+        Time.timeScale = 1; // 시간 다시 정상 흐름
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // 현재 씬 다시 로드
     }
-
 }

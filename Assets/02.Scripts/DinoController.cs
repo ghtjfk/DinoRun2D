@@ -19,6 +19,11 @@ public class DinoController : MonoBehaviour
     private Vector2 savedSize;      // 서 있을 때 값
     private BoxCollider2D boxCollider;
 
+    AudioSource audioSource;
+    public AudioClip jumpClip;
+    public AudioClip deathClip;
+    public AudioClip pointClip;
+
 
     void Start()
     {
@@ -29,6 +34,8 @@ public class DinoController : MonoBehaviour
         anim.SetBool("isDown", false);
 
         SaveColliderSettings();     // 서 있을 때 collider값 저장 
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -37,6 +44,7 @@ public class DinoController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded.Equals(true))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            audioSource.PlayOneShot(jumpClip);
         }
         anim.SetBool("isGround", isGrounded);
 
@@ -103,12 +111,14 @@ public class DinoController : MonoBehaviour
         if (collision.CompareTag("PointSpace"))
         {
             GameManager.instance.GetScore();    // 싱글톤으로 접근.
+            audioSource.PlayOneShot(pointClip);
         }
 
         // 장애물이랑 충돌했을 때
         if (collision.CompareTag("GameOverSpace"))
         {
             GameManager.instance.GameOver();
+            audioSource.PlayOneShot(deathClip);
         }
     }
 }
